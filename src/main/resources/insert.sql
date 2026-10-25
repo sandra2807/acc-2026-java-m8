@@ -1,32 +1,14 @@
-PRAGMA foreign_keys = ON;
+-- Insert the parent rows first so students can reference valid course IDs.
+INSERT INTO courses (course_id, name, credits)
+VALUES (1, 'Java Programming', 4),
+       (2, 'Database Fundamentals', 3),
+       (3, 'Web Development', 5);
 
--- Delete students first because students depends on courses.
-DELETE FROM students;
-DELETE FROM courses;
-
--- TODO 1:
--- Insert 3 courses.
--- Remember:
--- course_id is a number.
--- course_name must be present.
--- credits must be greater than 0.
--- Hint: INSERT INTO table (columns) VALUES (row 1), (row 2), ...
-
-
-
--- TODO 2:
--- Insert 5 students.
--- Remember:
--- id is a number.
--- name must be present.
--- email must be unique.
--- age must be 18 or older.
--- course_id must exist in the courses table.
-
-
-
--- TODO 3:
--- Uncomment this to test a foreign key error.
--- This should fail because course_id 999 does not exist.
--- INSERT INTO students (id, name, email, age, course_id)
--- VALUES (6, 'Invalid Course Student', 'invalid@example.com', 20, 999);
+-- Insert five adults with unique emails and explicit IDs.
+-- Leave course 3 empty to demonstrate a zero count in the LEFT JOIN query.
+INSERT INTO students (student_id, name, email, age, course_id)
+VALUES (1, 'Alice Johnson', 'alice@example.com', 20, 1),
+       (2, 'Bob Smith', 'bob@example.com', 22, 2),
+       (3, 'Carol Davis', 'carol@example.com', 19, 1),
+       (4, 'David Brown', 'david@example.com', 24, 2),
+       (5, 'Emma Wilson', 'emma@example.com', 21, 1);

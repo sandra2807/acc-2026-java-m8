@@ -1,57 +1,49 @@
-PRAGMA foreign_keys = ON;
+-- 1. Show all courses to check the inserted course data.
+-- Expected: three courses, ordered by course_id.
+SELECT * FROM courses ORDER BY course_id;
 
--- TODO 1:
--- Select all courses.
+-- 2. Show all students to check the starting data before making changes.
+-- Expected: five students, ordered by student_id.
+SELECT * FROM students ORDER BY student_id;
 
+-- 3. Filter by age to find students strictly older than 20.
+-- Expected: Bob (22), David (24), and Emma (21).
+SELECT * FROM students WHERE age > 20 ORDER BY student_id;
 
+-- 4. Match each student to a course to display readable course names.
+-- Expected: all five students with their email, age, and course name.
+SELECT students.name AS student_name, students.email, students.age,
+       courses.name AS course_name
+FROM students
+INNER JOIN courses ON students.course_id = courses.course_id
+ORDER BY students.student_id;
 
--- TODO 2:
--- Select all students.
+-- 5. Keep every course and count its matching students to show enrollment.
+-- Count student IDs so a course without a student has a count of zero.
+-- Expected: Java Programming 3, Database Fundamentals 2, Web Development 0.
+SELECT courses.course_id, courses.name AS course_name,
+       COUNT(students.student_id) AS student_count
+FROM courses
+LEFT JOIN students ON courses.course_id = students.course_id
+GROUP BY courses.course_id, courses.name
+ORDER BY courses.course_id;
 
+-- 6. Correct one student's age using the primary key to target only that row.
+-- Expected: Alice's age changes from 20 to 21, affecting one student.
+UPDATE students SET age = 21 WHERE student_id = 1;
 
+-- 7. Move one student to another existing course to practice a valid relationship change.
+-- Expected: Bob moves from course 2 to course 3 (Web Development).
+UPDATE students SET course_id = 3 WHERE student_id = 2;
 
--- TODO 3:
--- Select students older than 20.
--- Hint: use WHERE.
+-- 8. Delete one student by primary key to practice removing a single row safely.
+-- Expected: David (student_id 4) is removed, leaving four students.
+DELETE FROM students WHERE student_id = 4;
 
-
-
--- TODO 4:
--- Show student names together with course names.
--- Show: student name, email, age and course name.
--- Hint: use JOIN ... ON students.course_id = courses.course_id
-
-
-
--- TODO 5:
--- Count how many students are in each course.
--- Courses with 0 students should also be shown.
--- Hint: use COUNT, LEFT JOIN and GROUP BY.
-
-
-
--- TODO 6:
--- Update the first student's age.
--- Then select that student to check the update.
--- Hint: use UPDATE ... SET ... WHERE ...
-
-
-
--- TODO 7:
--- Move the second student to a different course.
--- Then check the update using JOIN to show the new course name.
-
-
-
--- TODO 8:
--- Delete one student.
--- Hint: do not forget the WHERE clause, or every student will be deleted!
-
-
-
--- TODO 9:
--- Check the final result.
--- Show id, name, email, age and course name for every student, ordered by id.
--- Hint: use JOIN and ORDER BY.
-
-
+-- 9. Join the remaining students to their courses to verify all three changes.
+-- Expected: Alice (21, Java), Bob (22, Web), Carol (19, Java), Emma (21, Java).
+SELECT students.student_id, students.name AS student_name,
+       students.email, students.age, courses.name AS course_name
+FROM students
+INNER JOIN courses ON students.course_id = courses.course_id
+ORDER BY students.student_id;
